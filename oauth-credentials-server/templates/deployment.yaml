@@ -33,32 +33,17 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          env:
-            {{- include "repo.commonEnv" . | nindent 12 }}
-            - name: SSH_PRIVATE_KEY
-              value: {{ .Values.sshPrivateKey | quote }}
-
           ports:
             - name: grpc
               containerPort: {{ .Values.service.port }}
-{{/*          livenessProbe:*/}}
-{{/*            grpc:*/}}
-{{/*              port: 8080*/}}
-{{/*          startupProbe:*/}}
-{{/*            periodSeconds: 10*/}}
-{{/*            failureThreshold: 30*/}}
-{{/*            grpc:*/}}
-{{/*              port: 8080*/}}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-
           volumeMounts:
             - name: oauth-config
               mountPath: /cfg
               {{- with .Values.volumeMounts }}
                 {{- toYaml . | nindent 12 }}
               {{- end }}
-
       volumes:
         - name: oauth-config
           configMap:

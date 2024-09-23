@@ -5,18 +5,18 @@ replicaCount: 1
 
 config: |-
   providers:
-    - name: github
-      client_id: ""
-      client_secret: ""
-      redirect_url: ""
-    - name: gitlab
-      client_id: ""
-      client_secret: ""
-      redirect_url: ""
-    - name: bitbucket
-      client_id: ""
-      client_secret: ""
-      redirect_url: ""
+  - name: github
+    client_id: ""
+    client_secret: ""
+    redirect_url: ""
+  - name: gitlab
+    client_id: ""
+    client_secret: ""
+    redirect_url: ""
+  - name: bitbucket
+    client_id: ""
+    client_secret: ""
+    redirect_url: ""
   allow_provider_registration: true 
 
 image:

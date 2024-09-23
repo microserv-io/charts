@@ -4,4 +4,4 @@ metadata:
   name: {{ include "oauth-credentials-server.fullname" . }}-oauth-cm
 data:
   config.yaml:
-    {{ index .Values.config | toYaml | nindent 2 }}
+    {{ .Values.config | toYaml | nindent 4 }}
