@@ -1,0 +1,81 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "oauth-credentials-server.fullname" . }}-oauth
+  labels:
+    {{- include "oauth-credentials-server.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "oauth-credentials-server.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "oauth-credentials-server.selectorLabels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "oauth-credentials-server.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ include "oauth-credentials-server.fullname" . }}-oauth
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            {{- include "repo.commonEnv" . | nindent 12 }}
+            - name: SSH_PRIVATE_KEY
+              value: {{ .Values.sshPrivateKey | quote }}
+
+          ports:
+            - name: grpc
+              containerPort: {{ .Values.service.port }}
+{{/*          livenessProbe:*/}}
+{{/*            grpc:*/}}
+{{/*              port: 8080*/}}
+{{/*          startupProbe:*/}}
+{{/*            periodSeconds: 10*/}}
+{{/*            failureThreshold: 30*/}}
+{{/*            grpc:*/}}
+{{/*              port: 8080*/}}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+
+          volumeMounts:
+            - name: oauth-config
+              mountPath: /cfg
+              {{- with .Values.volumeMounts }}
+                {{- toYaml . | nindent 12 }}
+              {{- end }}
+
+      volumes:
+        - name: oauth-config
+          configMap:
+            name: {{ include "oauth-credentials-server.fullname" . }}-oauth-cm
+        {{- with .Values.volumes }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+

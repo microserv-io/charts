@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "ext-gcp-pubsub-emulator.fullname" . }}-test-connection"
+  labels:
+    {{- include "ext-gcp-pubsub-emulator.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "ext-gcp-pubsub-emulator.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
