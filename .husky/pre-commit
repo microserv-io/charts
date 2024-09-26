@@ -16,7 +16,7 @@ helm lint $chart_dirs
 
 # If linting fails, abort the commit
 if [ $? -ne 0 ]; then
-    echo "Helm lint failed. Aborting commit."
+    echo "Helm lint failed."
     exit 1
 fi
 
