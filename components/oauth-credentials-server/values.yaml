@@ -5,22 +5,16 @@ replicaCount: 1
 
 config: |-
   providers:
-  - name: github
+  - name: example
     client_id: ""
-    client_secret: ""
     redirect_url: ""
-  - name: gitlab
-    client_id: ""
-    client_secret: ""
-    redirect_url: ""
-  - name: bitbucket
-    client_id: ""
-    client_secret: ""
-    redirect_url: ""
+    auth_url: ""
+    token_url: ""
+    scopes: []
   allow_provider_registration: true 
 
 image:
-  repository: gcr.io/google.com/cloudsdktool/cloud-sdk
+  repository: europe-west4-docker.pkg.dev/microserv-io/oauth-credentials-server
   pullPolicy: IfNotPresent
   # Overrides the image tag whose default is the chart appVersion.
   tag: ""
@@ -120,3 +114,6 @@ nodeSelector: { }
 tolerations: [ ]
 
 affinity: { }
+
+postgresql:
+  enabled: false

@@ -1,13 +1,23 @@
-find . -name Chart.yaml | while read chart; do
-    chart_dir=$(dirname "$chart")
-    echo "Linting chart in directory: $chart_dir"
-    helm lint "$chart_dir"
-    
-    # If the linting fails, exit and prevent the commit
-    if [ $? -ne 0 ]; then
-        echo "Helm lint failed in $chart_dir. Aborting commit."
-        exit 1
-    fi
-done
+echo "Collecting all Helm charts..."
+
+# Collect all directories containing Chart.yaml
+chart_dirs=$(find . -name Chart.yaml -exec dirname {} \;)
+
+# Check if any charts were found
+if [ -z "$chart_dirs" ]; then
+    echo "No Helm charts found. Skipping Helm lint."
+    exit 0
+fi
+
+# Run helm lint for all collected chart directories
+echo "Running Helm lint on the following charts:"
+echo "$chart_dirs"
+helm lint $chart_dirs
+
+# If linting fails, abort the commit
+if [ $? -ne 0 ]; then
+    echo "Helm lint failed. Aborting commit."
+    exit 1
+fi
 
 echo "Helm lint passed for all charts."
