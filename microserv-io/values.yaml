@@ -1,0 +1,33 @@
+# Default values for microservio.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+fullnameOverride: ""
+nameOverride: ""
+
+istio:
+  gateway:
+    selector: ingressgateway
+    port: 80
+    tls:
+      enabled: false
+      credentialName:
+    hosts: [ ]
+
+externalPostgresql:
+  existingSecret:
+
+gcpPubsubEmulator:
+  enabled: true
+
+postgresql:
+  enabled: false
+
+oauthCredentialsServer:
+  enabled: true
+
+internalGqlGateway:
+  enabled: true
+
+internalCoreSystem:
+  enabled: true

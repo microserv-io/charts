@@ -1,0 +1,26 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: {{ include "microservio.fullname" . }}-gateway
+spec:
+  selector:
+    istio: {{ .Values.istio.gateway.selector }}
+  servers:
+    - port:
+        number: {{ .Values.istio.gateway.port }}
+        {{ if .Values.istio.gateway.tls.enabled -}}
+        name: https
+        protocol: HTTPS
+        {{- else -}}
+        name: http
+        protocol: HTTP
+        {{- end }}
+      {{ if .Values.istio.gateway.tls.enabled -}}
+      tls:
+        mode: SIMPLE
+        credentialName: {{ .Values.istio.gateway.tls.credentialName }}
+      {{- end }}
+      hosts:
+        {{- range .Values.istio.gateway.hosts }}
+        - {{ . | quote }}
+        {{- end }}

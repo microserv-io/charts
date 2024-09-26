@@ -1,0 +1,18 @@
+dependencies:
+- name: postgresql
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 14.3.3
+- name: oauth-credentials-server
+  repository: file://../components/oauth-credentials-server
+  version: 0.1.0
+- name: internal-core-system
+  repository: file://../components/internal-core-system
+  version: 0.1.0
+- name: internal-gql-gateway
+  repository: file://../components/internal-gql-gateway
+  version: 0.1.0
+- name: gcp-pubsub-emulator
+  repository: file://../thirdparty/gcp-pubsub-emulator
+  version: 0.1.0
+digest: sha256:bdb2c4c6dd4f19814a4dc4e30fb1b51fd50e8ced65de725b48e7fa8f12732fa3
+generated: "2024-09-26T22:11:03.196838+02:00"

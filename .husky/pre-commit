@@ -1,0 +1,13 @@
+find . -name Chart.yaml | while read chart; do
+    chart_dir=$(dirname "$chart")
+    echo "Linting chart in directory: $chart_dir"
+    helm lint "$chart_dir"
+    
+    # If the linting fails, exit and prevent the commit
+    if [ $? -ne 0 ]; then
+        echo "Helm lint failed in $chart_dir. Aborting commit."
+        exit 1
+    fi
+done
+
+echo "Helm lint passed for all charts."
